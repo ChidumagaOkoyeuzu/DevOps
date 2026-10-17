@@ -10,8 +10,8 @@ We use a simple Git Flow: two long-lived branches, and a short-lived branch for 
 
 | Branch | What's on it | Deploys to | Who changes it |
 |---|---|---|---|
-| `main` | The live app. Always working. | Live: front end on Vercel, API on Render | Only through a release PR from `develop`, or a hotfix PR |
-| `develop` | Everything finished this sprint. Should always build and pass tests. | Staging: front end on Vercel, API on Render | Only through reviewed PRs from card branches |
+| `main` | The live app. Always working. | Live site on Vercel | Only through a release PR from `develop`, or a hotfix PR |
+| `develop` | Everything finished this sprint. Should always build and pass tests. | Staging site on Vercel | Only through reviewed PRs from card branches |
 
 Nobody commits to `main` or `develop` directly, even for a one-line fix. Both are protected.
 
@@ -142,6 +142,7 @@ If you changed the database schema, include the Prisma migration in the same PR.
 - Open the PR into `develop` (or into `main` for a hotfix).
 - Fill in the PR template and write `Closes #14` so the card closes itself when the PR is merged.
 - Add screenshots for any UI change, and check it against the Figma design.
+- Vercel adds a preview link to every PR. Reviewers should open it and try the change.
 - Keep PRs small enough to review in about 15 minutes. Split big cards if you need to.
 - Move the card to **In review**.
 
@@ -157,7 +158,7 @@ If you changed the database schema, include the Prisma migration in the same PR.
 ## Tests
 
 - New logic gets **unit tests** (Vitest).
-- New or changed API routes get **integration tests** (Supertest).
+- New or changed API routes get **integration tests** (Vitest, against a test database).
 - Main user journeys are covered by **end-to-end tests** (Playwright).
 - Coverage can't drop below the minimum set in the pipeline.
 
@@ -167,7 +168,7 @@ At the end of each sprint, once staging has been checked:
 
 1. Open a PR from `develop` into `main`, titled e.g. `Sprint 1 release`.
 2. The whole team reviews it, and at least one person approves.
-3. Merging deploys the front end to Vercel and the API to Render.
+3. Merging deploys the live site on Vercel.
 4. Check the live site and the monitoring dashboard afterwards.
 
 5. Tag the release on `main`, e.g. `v0.1.0` for Sprint 1, `v0.2.0` for Sprint 2.

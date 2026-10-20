@@ -13,9 +13,12 @@ Naija Kitchen runs as one Next.js app on Vercel. This file lists what we use and
 | Login | **Better Auth** | Sign up, login, logout, password hashing and sessions, saved via Prisma |
 | Photos | **Cloudinary** | The browser uploads photos straight to Cloudinary, and we only save the URL |
 | Code quality | **ESLint + Prettier**, npm + lockfile | Catches mistakes and keeps formatting consistent |
-| Testing | **Vitest**, **Playwright** | Unit, integration and coverage; full browser tests |
+| Testing | **Vitest** (+ next-test-api-route-handler), **Playwright** | Unit tests, API tests and coverage; full browser tests |
 | CI | **GitHub Actions** | Runs lint, tests and the build on every PR and push |
 | Hosting | **Vercel** | `main` goes live, `develop` is staging, and every PR gets a preview link |
+| Live checks | **Checkly** | Runs our Playwright tests and API checks on the live site every hour and alerts us if one fails |
+| Errors and logs | **Sentry** | Catches errors real users hit, keeps logs for 30 days, and records how fast pages and API calls are |
+| Analytics | **Vercel Web Analytics + Speed Insights** | Shows visitor numbers and page speed in the Vercel dashboard |
 | Design | **Figma** | Mockups and style guide |
 
 ## How it fits together
@@ -26,6 +29,8 @@ flowchart LR
   user -->|photo upload| cdn["Cloudinary"]
   next -->|Better Auth checks session| next
   next -->|Prisma| db[("PostgreSQL<br/>(Neon)")]
+  checkly["Checkly"] -.->|hourly checks| next
+  next -.->|errors and logs| sentry["Sentry"]
 ```
 
 Example, creating a recipe:
@@ -75,11 +80,12 @@ Photos upload from the browser straight to Cloudinary, so they never pass throug
 [cloudinary.com](https://cloudinary.com/) · [Upload docs](https://cloudinary.com/documentation/upload_images)
 
 ### Vitest + Playwright
-- **Vitest** for unit tests, coverage, and integration tests that call our API routes against a test database.
-- **Playwright** for end-to-end tests that click through the site like a real user.
+- **Vitest** for unit tests and coverage. With **next-test-api-route-handler** it also runs integration tests that call our API routes against a test database, without starting the whole site. We don't need Supertest, which only works with Express.
+- **Playwright** for end-to-end tests that click through the site like a real user. It also covers what Vitest can't test: async Server Components and Server Actions.
 
 Together these cover the three levels the brief asks for: unit, integration and acceptance.
-[vitest.dev](https://vitest.dev/) · [playwright.dev](https://playwright.dev/)
+**Trade-off:** API tests need their own test database (a spare Neon branch) so they never touch real data.
+[vitest.dev](https://vitest.dev/) · [playwright.dev](https://playwright.dev/) · [Next.js Vitest guide](https://nextjs.org/docs/app/guides/testing/vitest)
 
 ### ESLint + Prettier
 ESLint flags likely bugs and bad patterns. Prettier formats the code the same way for everyone, so reviews are about the logic, not spacing.
@@ -98,11 +104,22 @@ Made by the Next.js team, so it runs Next.js with almost no setup. It deploys au
 **Trade-off:** we depend on one provider, and the free tier has usage limits.
 [vercel.com](https://vercel.com/) · [Next.js on Vercel](https://vercel.com/docs/frameworks/nextjs)
 
+### Monitoring and logging: Checkly + Sentry + Vercel Analytics
+Our tests only check the code before it goes live. These tools watch the live site after.
+- **Checkly** reruns our Playwright tests and API checks on the live site every hour and emails or Slacks us if something breaks. We write each test once and use it twice: in CI and on the live site.
+- **Sentry** records errors real users hit, keeps logs for 30 days and tracks how fast pages and API calls are. We need it because Vercel's free plan only keeps 1 hour of logs, and sending logs elsewhere (drains) needs the paid plan.
+- **Vercel Web Analytics + Speed Insights** are built into Vercel and show visits and page speed.
+
+In short: Checkly tells us something broke, Sentry tells us why. All three are free.
+**Trade-off:** Checkly and Sentry only allow 1 user on the free plan, so one of us owns each account and alerts go to the team chat. Checkly's free plan covers about one browser check per hour.
+[checklyhq.com](https://www.checklyhq.com/) · [sentry.io](https://sentry.io/) · [Vercel Analytics](https://vercel.com/docs/analytics) · [Vercel free plan limits](https://vercel.com/docs/plans/hobby)
+
 ## Environments
 
 | Environment | Branch | Where it runs | Database |
 |---|---|---|---|
 | Local | your branch | `localhost:3000` | Your own Neon branch or local Postgres |
+| CI tests | any PR or push | GitHub Actions | Neon test database |
 | PR preview | any PR | Vercel preview link | Neon staging database |
 | Staging | `develop` | Vercel (staging URL) | Neon staging database |
 | Live | `main` | Vercel production | Neon live database |
@@ -119,7 +136,7 @@ Never commit secrets. Every variable the app needs is listed, without real value
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary account |
 | `CLOUDINARY_API_KEY` | Cloudinary account |
 | `CLOUDINARY_API_SECRET` | Signs uploads (server only, never sent to the browser) |
-
-## Still to decide
-
-- **Monitoring and logging tools** (card #34): what we use for uptime checks, metrics and logs.
+| `NEXT_PUBLIC_SENTRY_DSN` | Tells the app where to send errors and logs in Sentry |
+| `SENTRY_AUTH_TOKEN` | Lets the build upload source maps to Sentry (CI and Vercel only) |
+| `CHECKLY_API_KEY` | Lets CI deploy our checks to Checkly |
+| `CHECKLY_ACCOUNT_ID` | Our Checkly account |

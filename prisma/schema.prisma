@@ -16,7 +16,9 @@ datasource db {
 
 model User {
   id            String   @id
-  name          String
+  firstName     String // Better Auth's "name" field is mapped to this column
+  lastName      String
+  username      String?  @unique // lowercase, used to log in (Better Auth username plugin)
   email         String   @unique
   emailVerified Boolean  @default(false)
   image         String? // profile picture URL (Cloudinary)

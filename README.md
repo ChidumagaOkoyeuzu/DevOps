@@ -38,7 +38,32 @@ Built by Nathan, Chidumaga, Frank and Vic for COM619 DevOps at Solent University
 
 ## Running it locally
 
-Setup steps will be added here by the Project skeleton card, so that the app runs with one command.
+You need Node.js 20 or newer, and access to our Neon project.
+
+1. Clone the repo and install packages (this also sets up Prisma):
+   ```bash
+   git clone https://github.com/ChidumagaOkoyeuzu/DevOps.git
+   cd DevOps
+   npm install
+   ```
+2. In Neon, create your own branch from `production` (e.g. `dev-yourname`, auto-delete set to Never).
+3. Copy the settings template and fill in your branch's connection strings:
+   ```bash
+   cp .env.example .env
+   ```
+   - `DATABASE_URL`: connection string with pooling **off**
+   - `DATABASE_URL_POOLED`: connection string with pooling **on**
+4. Create the tables in your branch:
+   ```bash
+   npx prisma migrate dev
+   ```
+5. Start the app:
+   ```bash
+   npm run dev
+   ```
+6. Open http://localhost:3000. To check the database is connected, open http://localhost:3000/api/health. It should show `{"status":"ok","database":"ok"}`.
+
+Never commit `.env`. It holds your database password.
 
 ## Project docs
 

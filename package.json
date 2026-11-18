@@ -14,6 +14,7 @@
   "dependencies": {
     "@prisma/adapter-neon": "7.10.1",
     "@prisma/client": "7.10.1",
+    "better-auth": "^1.7.14",
     "next": "16.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0"

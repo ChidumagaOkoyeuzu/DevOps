@@ -1,3 +1,5 @@
+// Copyright 2026 Naija Kitchen team
+// Licensed under the Apache License, Version 2.0 (see LICENSE)
 import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { ALLOWED_UNITS, SEED_RECIPES, SEED_TRIBES } from "./seed-data";

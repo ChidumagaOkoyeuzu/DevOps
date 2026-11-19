@@ -9,6 +9,7 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "format": "prettier --write .",
+    "test": "vitest run",
     "format:check": "prettier --check ."
   },
   "dependencies": {
@@ -30,6 +31,8 @@
     "prettier": "3.9.10",
     "prisma": "7.10.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "^3.2.7"
   }
 }

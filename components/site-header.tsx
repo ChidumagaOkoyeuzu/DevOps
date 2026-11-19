@@ -32,7 +32,7 @@ export function SiteHeader() {
         {/* On phones the links drop to a second row */}
         <nav
           aria-label="Main"
-          className="order-last w-full md:order-none md:w-auto"
+          className="order-last w-full md:order-0 md:w-auto"
         >
           <ul className="flex gap-6 text-sm">
             {NAV_LINKS.map((link) => (

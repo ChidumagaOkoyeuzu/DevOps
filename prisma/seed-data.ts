@@ -64,7 +64,9 @@ export const SEED_TRIBES = [
 // The account that owns the starter recipes. It has no password, so nobody can log in as it.
 export const SEED_AUTHOR = {
   id: "seed-naija-kitchen",
-  name: "Naija Kitchen",
+  firstName: "Naija",
+  lastName: "Kitchen",
+  username: "naijakitchen",
   email: "team@naijakitchen.example",
 };
 

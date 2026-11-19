@@ -1,7 +1,6 @@
-
 export function totalMinutes(
   prepMinutes: number | null,
-  cookMinutes: number | null
+  cookMinutes: number | null,
 ): number | null {
   if (prepMinutes === null && cookMinutes === null) {
     return null;

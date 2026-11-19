@@ -1,7 +1,6 @@
 /* Copyright 2026 Naija Kitchen team
    Licensed under the Apache License, Version 2.0 (see LICENSE) */
 
-   
 @import "tailwindcss";
 
 /* dark: classes follow the data-theme attribute that app/layout.tsx sets */

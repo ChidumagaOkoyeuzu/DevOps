@@ -1,3 +1,6 @@
+// Copyright 2026 Naija Kitchen team
+// Licensed under the Apache License, Version 2.0 (see LICENSE)
+
 import { PrismaClient } from "@/app/generated/prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
 

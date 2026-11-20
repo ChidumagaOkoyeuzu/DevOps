@@ -1,3 +1,5 @@
+// Copyright 2026 Naija Kitchen team
+// Licensed under the Apache License, Version 2.0 (see LICENSE)
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";

@@ -1,26 +1,59 @@
+/* Copyright 2026 Naija Kitchen team
+   Licensed under the Apache License, Version 2.0 (see LICENSE) */
+
 @import "tailwindcss";
 
+/* dark: classes follow the data-theme attribute that app/layout.tsx sets */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Naija Kitchen colours, from the Figma style guide */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --nk-page: #f7f6f0;
+  --nk-surface: #faf8f3;
+  --nk-ink: #2a2a2a;
+  --nk-ink-strong: #181818;
+  --nk-muted: #656565;
+  --nk-line: #d9d6cc;
+  --nk-field: #8d8674;
+  --nk-primary: #232323;
+  --nk-on-primary: #ffffff;
+  --nk-footer: #232323;
+  --nk-brand: #0a7a45;
+  --nk-premium: #f4bf1f;
+  --nk-danger: #9c2b23;
 }
 
+[data-theme="dark"] {
+  --nk-page: #141412;
+  --nk-surface: #1c1c1a;
+  --nk-ink: #ecebe6;
+  --nk-ink-strong: #ffffff;
+  --nk-muted: #b4b2aa;
+  --nk-line: #33322d;
+  --nk-field: #6b6860;
+  --nk-primary: #f2f0ea;
+  --nk-on-primary: #161614;
+  --nk-footer: #0d0d0c;
+  --nk-brand: #4cc98c;
+  --nk-premium: #f4bf1f;
+  --nk-danger: #e5675c;
+}
+
+/* Turns the colours and fonts into Tailwind classes, e.g. bg-page, text-muted, font-heading */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  --color-page: var(--nk-page);
+  --color-surface: var(--nk-surface);
+  --color-ink: var(--nk-ink);
+  --color-ink-strong: var(--nk-ink-strong);
+  --color-muted: var(--nk-muted);
+  --color-line: var(--nk-line);
+  --color-field: var(--nk-field);
+  --color-primary: var(--nk-primary);
+  --color-on-primary: var(--nk-on-primary);
+  --color-footer: var(--nk-footer);
+  --color-brand: var(--nk-brand);
+  --color-premium: var(--nk-premium);
+  --color-danger: var(--nk-danger);
+  --font-sans: var(--font-lexend);
+  --font-heading: var(--font-bitter);
 }

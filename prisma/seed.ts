@@ -1,3 +1,5 @@
+// Copyright 2026 Naija Kitchen team
+// Licensed under the Apache License, Version 2.0 (see LICENSE)
 import "dotenv/config";
 import { prisma } from "@/lib/prisma";
 import { SEED_AUTHOR, SEED_RECIPES, SEED_TRIBES } from "./seed-data";

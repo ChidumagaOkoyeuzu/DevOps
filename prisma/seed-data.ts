@@ -1,3 +1,5 @@
+// Copyright 2026 Naija Kitchen team
+// Licensed under the Apache License, Version 2.0 (see LICENSE)
 export const ALLOWED_UNITS = [
   "g",
   "kg",
@@ -64,7 +66,9 @@ export const SEED_TRIBES = [
 // The account that owns the starter recipes. It has no password, so nobody can log in as it.
 export const SEED_AUTHOR = {
   id: "seed-naija-kitchen",
-  name: "Naija Kitchen",
+  firstName: "Naija",
+  lastName: "Kitchen",
+  username: "naijakitchen",
   email: "team@naijakitchen.example",
 };
 

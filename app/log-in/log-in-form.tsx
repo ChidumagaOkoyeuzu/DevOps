@@ -16,7 +16,7 @@ import {
 } from "@/lib/validation/log-in";
 
 // Green links from the Figma frame (swap for the exact hex or theme class)
-const LINK = "text-[#0a7a3b] underline underline-offset-2";
+const LINK = "text-brandunderline underline-offset-2";
 
 type FieldProps = {
   id: string;
@@ -54,7 +54,7 @@ function Field({
           onChange={(e) => onChange(e.target.value)}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
-          className="peer h-[46px] w-full rounded-sm border border-[#8d8674] bg-transparent px-3 pt-4 text-[13px] placeholder-transparent"
+          className="peer h-[46px] w-full rounded-sm border border-field bg-transparent px-3 pt-4 text-[13px] placeholder-transparent"
         />
         <label
           htmlFor={id}
@@ -148,7 +148,7 @@ export function LogInForm() {
           type="checkbox"
           checked={rememberMe}
           onChange={(e) => setRememberMe(e.target.checked)}
-          className="size-5 accent-[#232323]"
+          className="size-5 accent-primary"
         />
         Keep me signed in
       </label>

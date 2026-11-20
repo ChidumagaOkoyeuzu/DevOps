@@ -20,13 +20,15 @@ export default function SignUpPage() {
       {/* Right: Premium card, hidden on phones */}
       <aside className="hidden flex-col rounded-[14px] bg-[#232323] p-8 text-white lg:flex">
         <div className="relative min-h-80 flex-1 overflow-hidden rounded-[14px]">
-          <Image
-            src="/images/premium-dishes.jpg"
-            alt="A table of Nigerian dishes"
-            fill
-            sizes="(min-width: 1024px) 40vw, 0px"
-            className="object-cover"
-          />
+<Image
+  src="/images/premium-dishes.jpg"
+  alt="Premium dishes"
+  width={1200}
+  height={800}
+  loading="eager"
+  sizes="(min-width: 1024px) 50vw, 100vw"
+  className="h-auto w-full"
+/>
         </div>
         <h2 className="mt-6 text-2xl font-bold text-[#f4bf1f]">Premium</h2>
         <p className="mt-2 text-sm text-white/90">

@@ -17,7 +17,7 @@ export const metadata: Metadata = { title: "Log in" };
 export default function LogInPage() {
   return (
     <div
-            className={`${lexend.className} min-h-screen bg-[#faf8f3] text-[#1f1f1f] dark:bg-[#121212] dark:text-[#f5f5f5]`}
+      className={`${lexend.className} min-h-screen bg-[#faf8f3] text-[#1f1f1f] dark:bg-[#121212] dark:text-[#f5f5f5]`}
     >
       <main className="mx-auto w-full max-w-[992px] px-4 py-20">
         <section className="w-full max-w-[352px]">

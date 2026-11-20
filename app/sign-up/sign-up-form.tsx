@@ -189,9 +189,7 @@ export function SignUpForm() {
         onChange={update}
       />
 
- 
-
-  <button
+      <button
         type="submit"
         disabled={submitting}
         className="h-15 rounded-sm bg-[#232323] text-[13px] font-bold text-white disabled:opacity-60"

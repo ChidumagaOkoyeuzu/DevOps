@@ -13,7 +13,7 @@ export default function SignUpPage() {
     <main className="mx-auto grid w-full max-w-6xl items-stretch gap-16 px-4 py-12 lg:grid-cols-2">
       {/* Left: the form */}
       <section>
-        <h1 className="text-5xl font-medium">Sign up</h1>
+        <h1 className="font-heading text-4xl font-bold">Sign up</h1>
         <SignUpForm />
       </section>
 

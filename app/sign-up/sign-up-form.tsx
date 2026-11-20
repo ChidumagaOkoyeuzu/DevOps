@@ -64,7 +64,7 @@ function Field({
         onChange={(e) => onChange(name, e.target.value)}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
-        className="h-14 rounded border border-[#8d8674] bg-[#faf8f3] px-4 text-[15px]"
+        className="h-14 rounded border border-field bg-surface px-4 text-[15px]"
       />
       {hint && (
         <p id={hintId} className="text-[13px] text-neutral-600">
@@ -192,7 +192,7 @@ export function SignUpForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-4 h-14 bg-[#232323] text-[15px] font-semibold text-white disabled:opacity-60"
+        className="mt-4 h-14 bg-primary text-[15px] font-semibold text-on-primary disabled:opacity-60"
       >
         {submitting ? "Creating account…" : "Create account"}
       </button>

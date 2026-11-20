@@ -156,7 +156,7 @@ export function LogInForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="h-10 rounded-sm bg-[#232323] text-[13px] font-bold text-white disabled:opacity-60"
+        className="h-10 rounded-sm bg-primary text-[13px] font-bold text-on-primary disabled:opacity-60"
       >
         {submitting ? "Logging in…" : "Log in"}
       </button>

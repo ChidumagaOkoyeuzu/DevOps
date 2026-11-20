@@ -16,7 +16,7 @@ import {
 } from "@/lib/validation/log-in";
 
 // Green links from the Figma frame (swap for the exact hex or theme class)
-const LINK = "text-brandunderline underline-offset-2";
+const LINK = "text-brand underline underline-offset-2";
 
 type FieldProps = {
   id: string;

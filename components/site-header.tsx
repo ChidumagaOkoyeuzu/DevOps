@@ -2,12 +2,9 @@
 // Licensed under the Apache License, Version 2.0 (see LICENSE)
 
 import Link from "next/link";
-import {
-  ICON_BUTTON,
-  PlusIcon,
-  SearchIcon,
-  UserIcon,
-} from "@/components/icons";
+import { Suspense } from "react";
+import { AccountMenu, LogInLink } from "@/components/account-menu";
+import { ICON_BUTTON, PlusIcon, SearchIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const NAV_LINKS = [
@@ -31,7 +28,7 @@ export function SiteHeader() {
         {/* On phones the links drop to a second row */}
         <nav
           aria-label="Main"
-          className="order-last w-full md:order-0 md:w-auto"
+          className="order-last w-full md:order-none md:w-auto"
         >
           <ul className="flex gap-6 text-sm">
             {NAV_LINKS.map((link) => (
@@ -52,9 +49,7 @@ export function SiteHeader() {
           >
             <SearchIcon />
           </Link>
-
           <ThemeToggle />
-
           <Link
             href="/recipes/new"
             aria-label="Create recipe"
@@ -63,16 +58,10 @@ export function SiteHeader() {
           >
             <PlusIcon />
           </Link>
-
-          {/* Login / logout (#17) swaps this for the account menu when logged in */}
-          <Link
-            href="/log-in"
-            aria-label="Log in or sign up"
-            title="Log in or sign up"
-            className={ICON_BUTTON}
-          >
-            <UserIcon />
-          </Link>
+          {/* Shows the profile icon first, then the account menu if logged in */}
+          <Suspense fallback={<LogInLink />}>
+            <AccountMenu />
+          </Suspense>
         </div>
       </div>
     </header>

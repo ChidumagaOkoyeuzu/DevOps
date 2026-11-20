@@ -192,9 +192,9 @@ export function SignUpForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-4 h-14 bg-primary text-[15px] font-semibold text-on-primary disabled:opacity-60"
+        className="h-15 rounded-sm bg-primary text-[13px] font-bold text-on-primary disabled:opacity-60"
       >
-        {submitting ? "Creating account…" : "Create account"}
+        Create account
       </button>
 
       <p className="text-[15px]">

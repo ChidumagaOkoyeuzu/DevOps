@@ -2,3 +2,4 @@ app/generated
 .next
 package-lock.json
 *.md
+coverage

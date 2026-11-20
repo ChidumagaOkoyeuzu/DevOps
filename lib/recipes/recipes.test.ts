@@ -21,7 +21,7 @@ const row = {
   prepMinutes: 80,
   cookMinutes: 10,
   tribe: { name: "Hausa", slug: "hausa" },
-  author: { name: "naijakitchen" },
+  author: { username: "naijakitchen" },
   photos: [{ url: "/images/recipes/suya.jpg" }],
 };
 

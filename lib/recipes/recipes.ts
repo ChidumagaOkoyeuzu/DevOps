@@ -1,3 +1,5 @@
+// Copyright 2026 Naija Kitchen team
+// Licensed under the Apache License, Version 2.0 (see LICENSE)
 import { prisma } from "../prisma";
 import { totalMinutes } from "../format";
 
@@ -18,7 +20,7 @@ type SummaryRow = {
   prepMinutes: number | null;
   cookMinutes: number | null;
   tribe: { name: string; slug: string };
-  author: { name: string | null };
+  author: { username: string | null };
   photos: { url: string }[];
 };
 
@@ -29,7 +31,7 @@ export function toSummary(row: SummaryRow): RecipeSummary {
     title: row.title,
     tribeName: row.tribe.name,
     tribeSlug: row.tribe.slug,
-    authorUsername: row.author.name,
+    authorUsername: row.author.username,
     photoUrl: row.photos[0]?.url ?? null,
     totalMinutes: totalMinutes(row.prepMinutes, row.cookMinutes),
   };
@@ -46,7 +48,7 @@ export async function getPublicRecipes(): Promise<RecipeSummary[]> {
       prepMinutes: true,
       cookMinutes: true,
       tribe: { select: { name: true, slug: true } },
-      author: { select: { name: true } },
+      author: { select: { username: true } },
       photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
     },
   });

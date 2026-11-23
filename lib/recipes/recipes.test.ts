@@ -2,18 +2,22 @@
 // Licensed under the Apache License, Version 2.0 (see LICENSE)
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  canView,
+  getPublicRecipes,
+  getRecipeForViewer,
+  toSummary,
+} from "./recipes";
 
-// Fake database
+// A pretend database, so these tests never touch a real one
 const db = vi.hoisted(() => ({
-  recipe: { findMany: vi.fn() },
+  recipe: {
+    findMany: vi.fn(),
+    findUnique: vi.fn(),
+  },
 }));
 
-// Mock Prisma BEFORE importing recipes
-vi.mock("../prisma", () => ({
-  prisma: db,
-}));
-
-import { getPublicRecipes, toSummary } from "./recipes";
+vi.mock("@/lib/prisma", () => ({ prisma: db }));
 
 const row = {
   id: "r1",
@@ -40,7 +44,7 @@ describe("toSummary", () => {
     });
   });
 
-  it("handles no photo", () => {
+  it("copes with no photo", () => {
     expect(toSummary({ ...row, photos: [] }).photoUrl).toBeNull();
   });
 });
@@ -56,5 +60,70 @@ describe("getPublicRecipes", () => {
     expect(query.where).toEqual({ isPublic: true });
     expect(query.orderBy).toEqual({ createdAt: "desc" });
     expect(recipes).toEqual([toSummary(row)]);
+  });
+});
+
+describe("canView", () => {
+  const publicRecipe = { isPublic: true, authorId: "amara" };
+  const privateRecipe = { isPublic: false, authorId: "amara" };
+
+  it("shows public recipes to everyone", () => {
+    expect(canView(publicRecipe, null)).toBe(true);
+    expect(canView(publicRecipe, "someone-else")).toBe(true);
+  });
+
+  it("shows private recipes only to their author", () => {
+    expect(canView(privateRecipe, "amara")).toBe(true);
+    expect(canView(privateRecipe, "someone-else")).toBe(false);
+    expect(canView(privateRecipe, null)).toBe(false);
+  });
+});
+
+describe("getRecipeForViewer", () => {
+  const recipe = {
+    id: "r1",
+    title: "Masa",
+    description: "Rice cakes",
+    isPublic: false,
+    authorId: "amara",
+    prepMinutes: 90,
+    cookMinutes: 20,
+    servings: 4,
+    tribe: { name: "Hausa", slug: "hausa" },
+    author: { username: "amaracooks" },
+    photos: [{ url: "/images/recipes/masa.jpg" }],
+    ingredients: [
+      { quantity: "0.5", unit: "tsp", name: "salt" },
+      { quantity: null, unit: null, name: "oil, for frying" },
+    ],
+    steps: [{ instruction: "Soak the rice" }, { instruction: "Blend it" }],
+  };
+
+  it("returns null when the recipe doesn't exist", async () => {
+    db.recipe.findUnique.mockResolvedValue(null);
+
+    expect(await getRecipeForViewer("missing", null)).toBeNull();
+  });
+
+  it("hides a private recipe from other people", async () => {
+    db.recipe.findUnique.mockResolvedValue(recipe);
+
+    expect(await getRecipeForViewer("r1", null)).toBeNull();
+    expect(await getRecipeForViewer("r1", "someone-else")).toBeNull();
+  });
+
+  it("shows a private recipe to its author, ready for the page", async () => {
+    db.recipe.findUnique.mockResolvedValue(recipe);
+
+    const result = await getRecipeForViewer("r1", "amara");
+
+    expect(result?.title).toBe("Masa");
+
+    expect(result?.ingredients).toEqual([
+      { quantity: 0.5, unit: "tsp", name: "salt" },
+      { quantity: null, unit: null, name: "oil, for frying" },
+    ]);
+
+    expect(result?.steps).toEqual(["Soak the rice", "Blend it"]);
   });
 });

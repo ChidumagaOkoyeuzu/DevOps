@@ -1,5 +1,6 @@
 // Copyright 2026 Naija Kitchen team
 // Licensed under the Apache License, Version 2.0 (see LICENSE)
+
 export function totalMinutes(
   prepMinutes: number | null,
   cookMinutes: number | null,
@@ -32,4 +33,20 @@ export function formatMinutes(minutes: number | null): string | null {
   return `${hourText} ${remainingMinutes} ${
     remainingMinutes === 1 ? "min" : "mins"
   }`;
+}
+
+export type IngredientLine = {
+  quantity: number | null;
+  unit: string | null;
+  name: string;
+};
+
+export function formatIngredient({
+  quantity,
+  unit,
+  name,
+}: IngredientLine): string {
+  const amount = quantity === null ? null : String(Number(quantity));
+
+  return [amount, unit, name].filter(Boolean).join(" ");
 }

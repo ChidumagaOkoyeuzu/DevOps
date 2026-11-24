@@ -1,7 +1,5 @@
-// Copyright 2026 Naija Kitchen team
-// Licensed under the Apache License, Version 2.0 (see LICENSE)
 import { describe, expect, it } from "vitest";
-import { formatMinutes, totalMinutes } from "./format";
+import { formatIngredient, formatMinutes, totalMinutes } from "./format";
 
 describe("totalMinutes", () => {
   it("adds prep and cook time", () => {
@@ -37,5 +35,35 @@ describe("formatMinutes", () => {
   it("returns null for nothing or zero", () => {
     expect(formatMinutes(null)).toBeNull();
     expect(formatMinutes(0)).toBeNull();
+  });
+});
+
+describe("formatIngredient", () => {
+  it("shows amount, unit and name", () => {
+    expect(formatIngredient({ quantity: 500, unit: "g", name: "rice" })).toBe(
+      "500 g rice",
+    );
+  });
+
+  it("leaves out a missing unit", () => {
+    expect(
+      formatIngredient({ quantity: 4, unit: null, name: "plum tomatoes" }),
+    ).toBe("4 plum tomatoes");
+  });
+
+  it("shows just the name when there's no amount", () => {
+    expect(
+      formatIngredient({
+        quantity: null,
+        unit: null,
+        name: "salt, to taste",
+      }),
+    ).toBe("salt, to taste");
+  });
+
+  it("drops trailing zeros from decimals", () => {
+    expect(formatIngredient({ quantity: 0.5, unit: "tsp", name: "salt" })).toBe(
+      "0.5 tsp salt",
+    );
   });
 });

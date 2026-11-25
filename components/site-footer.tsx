@@ -45,7 +45,7 @@ export function SiteFooter() {
       <div className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-8 px-4 py-12 md:grid-cols-4">
         {COLUMNS.map((column) => (
           <div key={column.title}>
-            <h2 className="text-sm font-semibold">{column.title}</h2>
+            <h2 className="font-sans text-sm font-semibold">{column.title}</h2>
             <ul className="mt-4 flex flex-col gap-2 text-sm">
               {column.links.map((link) => (
                 <li key={link.href}>

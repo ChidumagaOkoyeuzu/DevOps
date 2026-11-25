@@ -1,0 +1,199 @@
+// Copyright 2026 Naija Kitchen team
+// Licensed under the Apache License, Version 2.0 (see LICENSE)
+
+// Database tables for Naija Kitchen, built from er-diagram.md
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------- Accounts (used by Better Auth) ----------
+
+model User {
+  id            String   @id
+  firstName     String // Better Auth's "name" field is mapped to this column
+  lastName      String
+  username      String?  @unique // lowercase, used to log in (Better Auth username plugin)
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String? // profile picture URL (Cloudinary)
+  bio           String?
+  theme         String   @default("light") // light or dark
+  units         String   @default("metric") // metric or imperial
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions   Session[]
+  accounts   Account[]
+  recipes    Recipe[]
+  comments   Comment[]
+  likes      Like[]
+  favourites Favourite[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  userId                String
+  accountId             String
+  providerId            String // "credential" for email + password
+  password              String? // hashed by Better Auth
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String // e.g. the email being verified
+  value      String // the token
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ---------- Recipes ----------
+
+model Tribe {
+  id          String  @id @default(cuid())
+  name        String  @unique // e.g. Yoruba
+  slug        String  @unique // e.g. yoruba, used in the URL
+  description String?
+  imageUrl    String?
+
+  recipes Recipe[]
+}
+
+model Recipe {
+  id          String   @id @default(cuid())
+  authorId    String
+  tribeId     String
+  title       String
+  description String?
+  prepMinutes Int?
+  cookMinutes Int?
+  servings    Int?
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  tribe       Tribe        @relation(fields: [tribeId], references: [id], onDelete: Restrict)
+  photos      Photo[]
+  steps       Step[]
+  ingredients Ingredient[]
+  comments    Comment[]
+  likes       Like[]
+  favourites  Favourite[]
+
+  @@index([authorId])
+  @@index([tribeId])
+}
+
+model Photo {
+  id       String @id @default(cuid())
+  recipeId String
+  url      String // Cloudinary URL, uploaded from the browser
+  position Int // 0 = thumbnail
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+}
+
+model Step {
+  id          String @id @default(cuid())
+  recipeId    String
+  position    Int
+  instruction String
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+}
+
+model Ingredient {
+  id       String   @id @default(cuid())
+  recipeId String
+  position Int
+  name     String
+  quantity Decimal? // empty for things like "salt to taste"
+  unit     String? // g, ml, tsp, cup...
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+}
+
+// ---------- Social ----------
+
+model Comment {
+  id        String   @id @default(cuid())
+  recipeId  String
+  userId    String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+}
+
+model Like {
+  userId    String
+  recipeId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@id([userId, recipeId]) // one like per person per recipe
+}
+
+model Favourite {
+  userId    String
+  recipeId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@id([userId, recipeId]) // one favourite per person per recipe
+}

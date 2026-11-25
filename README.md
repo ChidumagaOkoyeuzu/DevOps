@@ -8,8 +8,8 @@ Built by Nathan, Chidumaga, Frank and Vic for COM619 DevOps at Solent University
 
 | What | Link |
 |---|---|
-| Live site | Added once deployed (First deploy card) |
-| Staging site | Added once deployed (First deploy card) |
+| Live site | https://naija-kitchen-solent.vercel.app |
+| Staging site | https://naija-kitchen-staging.vercel.app |
 | Kanban board | https://github.com/users/ChidumagaOkoyeuzu/projects/8 |
 | Figma mockups and style guide | [Figma link] |
 
@@ -53,9 +53,12 @@ You need Node.js 20 or newer, and access to our Neon project.
    ```
    - `DATABASE_URL`: connection string with pooling **off**
    - `DATABASE_URL_POOLED`: connection string with pooling **on**
-4. Create the tables in your branch:
+   - `BETTER_AUTH_SECRET`: any long random text (make one with `openssl rand -base64 32`)
+   - `BETTER_AUTH_URL`: `http://localhost:3000`
+4. Create the tables in your branch and add the starter recipes:
    ```bash
    npx prisma migrate dev
+   npx prisma db seed
    ```
 5. Start the app:
    ```bash
@@ -64,6 +67,17 @@ You need Node.js 20 or newer, and access to our Neon project.
 6. Open http://localhost:3000. To check the database is connected, open http://localhost:3000/api/health. It should show `{"status":"ok","database":"ok"}`.
 
 Never commit `.env`. It holds your database password.
+
+## Environments
+
+| Environment | Branch | Address | Database (Neon branch) |
+|---|---|---|---|
+| Live | `main` | https://naija-kitchen-solent.vercel.app | `production` |
+| Staging | `develop` | https://naija-kitchen-staging.vercel.app | `staging` |
+| PR preview | any PR | link posted on the PR by Vercel | `staging` |
+
+Settings for live and staging are stored in Vercel, never in the repo.
+New migrations are applied with `npx prisma migrate deploy` (automatic from the Auto deploy card).
 
 ## Project docs
 

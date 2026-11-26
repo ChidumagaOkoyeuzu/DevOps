@@ -142,3 +142,13 @@ export async function getRecipeForViewer(
     steps: recipe.steps.map((step) => step.instruction),
   };
 }
+
+// The browser tab title. Private or missing recipes just say "Recipe".
+export async function getRecipeTabTitle(id: string): Promise<string> {
+  const recipe = await prisma.recipe.findUnique({
+    where: { id },
+    select: { title: true, isPublic: true },
+  });
+
+  return recipe?.isPublic ? recipe.title : "Recipe";
+}

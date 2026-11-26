@@ -1,11 +1,14 @@
-// Copyright 2026 Naija Kitchen team
+
+ // Copyright 2026 Naija Kitchen team
 // Licensed under the Apache License, Version 2.0 (see LICENSE)
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import {
   canView,
   getPublicRecipes,
   getRecipeForViewer,
+  getRecipeTabTitle,
   toSummary,
 } from "./recipes";
 
@@ -54,7 +57,6 @@ describe("getPublicRecipes", () => {
     db.recipe.findMany.mockResolvedValue([row]);
 
     const recipes = await getPublicRecipes();
-
     const query = db.recipe.findMany.mock.calls[0][0];
 
     expect(query.where).toEqual({ isPublic: true });
@@ -96,7 +98,10 @@ describe("getRecipeForViewer", () => {
       { quantity: "0.5", unit: "tsp", name: "salt" },
       { quantity: null, unit: null, name: "oil, for frying" },
     ],
-    steps: [{ instruction: "Soak the rice" }, { instruction: "Blend it" }],
+    steps: [
+      { instruction: "Soak the rice" },
+      { instruction: "Blend it" },
+    ],
   };
 
   it("returns null when the recipe doesn't exist", async () => {
@@ -125,5 +130,27 @@ describe("getRecipeForViewer", () => {
     ]);
 
     expect(result?.steps).toEqual(["Soak the rice", "Blend it"]);
+  });
+});
+
+describe("getRecipeTabTitle", () => {
+  it("shows the name of public recipes only", async () => {
+    db.recipe.findUnique.mockResolvedValueOnce({
+      title: "Suya",
+      isPublic: true,
+    });
+
+    expect(await getRecipeTabTitle("r1")).toBe("Suya");
+
+    db.recipe.findUnique.mockResolvedValueOnce({
+      title: "Secret",
+      isPublic: false,
+    });
+
+    expect(await getRecipeTabTitle("r2")).toBe("Recipe");
+
+    db.recipe.findUnique.mockResolvedValueOnce(null);
+
+    expect(await getRecipeTabTitle("r3")).toBe("Recipe");
   });
 });

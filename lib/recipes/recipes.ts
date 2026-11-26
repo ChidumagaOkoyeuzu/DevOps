@@ -1,4 +1,5 @@
-// Copyright 2026 Naija Kitchen team
+
+ // Copyright 2026 Naija Kitchen team
 // Licensed under the Apache License, Version 2.0 (see LICENSE)
 
 // Recipe queries. Pages import these instead of calling Prisma directly,
@@ -141,4 +142,14 @@ export async function getRecipeForViewer(
     // Return only the instruction text
     steps: recipe.steps.map((step) => step.instruction),
   };
+}
+
+// The browser tab title. Private or missing recipes just say "Recipe".
+export async function getRecipeTabTitle(id: string): Promise<string> {
+  const recipe = await prisma.recipe.findUnique({
+    where: { id },
+    select: { title: true, isPublic: true },
+  });
+
+  return recipe?.isPublic ? recipe.title : "Recipe";
 }

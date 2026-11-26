@@ -1,0 +1,10 @@
+# Save every text file with LF line endings, on Windows and Mac alike,
+# so files nobody touched don't show as changed or fail the format check
+* text=auto eol=lf
+
+# Images are binary: never change their line endings
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.ico binary

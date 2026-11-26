@@ -124,6 +124,7 @@ To avoid conflicts: keep branches small, merge `develop` in often, and say in th
 - Start with a verb and put the issue number at the end: `Add recipe card component (#14)`
 - Don't commit `.env` files, secrets or `node_modules`. Use `.env.example` for new environment variables.
 - New source files get the Apache 2.0 licence header.
+- Line endings are set by `.gitattributes` (LF everywhere). On Windows, if files you never touched show as changed, run `git add --renormalize .` once and commit it.
 
 ## Before you open a pull request
 

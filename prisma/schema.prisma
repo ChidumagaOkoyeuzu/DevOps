@@ -109,6 +109,7 @@ model Recipe {
   cookMinutes Int?
   servings    Int?
   isPublic    Boolean  @default(true)
+  dietary     String[] @default([]) // e.g. egg-free, nut-free (see lib/recipes/dietary.ts)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

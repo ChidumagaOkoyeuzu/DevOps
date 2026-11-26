@@ -1,5 +1,4 @@
-
- // Copyright 2026 Naija Kitchen team
+// Copyright 2026 Naija Kitchen team
 // Licensed under the Apache License, Version 2.0 (see LICENSE)
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -98,10 +97,7 @@ describe("getRecipeForViewer", () => {
       { quantity: "0.5", unit: "tsp", name: "salt" },
       { quantity: null, unit: null, name: "oil, for frying" },
     ],
-    steps: [
-      { instruction: "Soak the rice" },
-      { instruction: "Blend it" },
-    ],
+    steps: [{ instruction: "Soak the rice" }, { instruction: "Blend it" }],
   };
 
   it("returns null when the recipe doesn't exist", async () => {

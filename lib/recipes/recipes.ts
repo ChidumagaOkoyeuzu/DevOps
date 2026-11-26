@@ -1,5 +1,4 @@
-
- // Copyright 2026 Naija Kitchen team
+// Copyright 2026 Naija Kitchen team
 // Licensed under the Apache License, Version 2.0 (see LICENSE)
 
 // Recipe queries. Pages import these instead of calling Prisma directly,

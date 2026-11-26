@@ -1,5 +1,6 @@
 // Copyright 2026 Naija Kitchen team
 // Licensed under the Apache License, Version 2.0 (see LICENSE)
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,8 +8,16 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { formatIngredient, formatMinutes } from "@/lib/format";
-import { getRecipeForViewer } from "@/lib/recipes/recipes";
+import { getRecipeForViewer, getRecipeTabTitle } from "@/lib/recipes/recipes";
 import { getCurrentUser } from "@/lib/session";
+
+// The browser tab shows the recipe's name, e.g. "Egusi Soup | Naija Kitchen"
+export async function generateMetadata({
+  params,
+}: PageProps<"/recipes/[id]">): Promise<Metadata> {
+  const { id } = await params;
+  return { title: await getRecipeTabTitle(id) };
+}
 
 export default function RecipePage({ params }: PageProps<"/recipes/[id]">) {
   return (

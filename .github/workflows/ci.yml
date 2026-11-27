@@ -54,3 +54,33 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  migrate:
+    name: Update the database (staging or live)
+    # Only after a merge into develop or main, and only when the checks passed
+    if: github.event_name == 'push'
+    needs: [checks]
+    runs-on: ubuntu-latest
+    # develop → the staging database, main → the live database
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    # Never two at once on the same database
+    concurrency: migrate-${{ github.ref_name }}
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Apply new migrations
+        run: npx prisma migrate deploy
+        env:
+          # The direct connection string (no -pooler), saved as a secret in this environment
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

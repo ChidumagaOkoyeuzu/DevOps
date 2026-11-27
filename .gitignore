@@ -42,6 +42,9 @@ next-env.d.ts
 
 /app/generated/prisma
 
+# photos uploaded while running locally (lib/uploads.ts)
+/uploads
+
 # AI coding tool files
 .claude/
 .windsurf/
